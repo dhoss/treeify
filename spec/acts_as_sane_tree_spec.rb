@@ -7,29 +7,29 @@ describe ActsAsSaneTree do
 
   describe "after suite setup" do
     it "should have populated nodes" do
-      assert Node.count > 0, 'Expecting Node instances to be available'
-      assert Node.count(:conditions => {:parent_id => nil}) > 0, 'Expecting root Node instances to be available'
-      assert Node.count(:conditions => "#{Node.table_name}.parent_id IS NOT NULL") > 0, 'Expecting child Node instances to be available'
+      Node.count.should be  > 0
+      Node.count(:conditions => {:parent_id => nil}).should be > 0
+      Node.count(:conditions => "#{Node.table_name}.parent_id IS NOT NULL").should be > 0
     end
   end
 
   describe "when requesting root nodes" do
     it "should return a scoping" do
-      assert_equal AR_SCOPE.name, Node.roots.class.name
+      expect(AR_SCOPE.name).to eq(Node.roots.class.name)
     end
     it "should return all root nodes" do
-      assert_equal Node.count(:conditions => {:parent_id => nil}), Node.roots.count
-      refute Node.roots.map(&:parent_id).detect{|x|!x.nil?}, 'Expecting root Node\'s parent_id to be nil'
+      Node.where(:parent_id => nil).count.should == Node.roots.count
+      Node.roots.map(&:parent_id).detect{|x|!x.nil?.should == true}
     end
     it "should allow scope chaining" do
       if(AREL)
-        assert_equal Node.where(:name => 'node_0').first, Node.roots.where(:name => 'node_0').first
+        expect(Node.where(:name => 'node_0').first).to eq(Node.roots.where(:name => 'node_0').first)
       else
-        assert_equal Node.find(:first, :conditions => {:name => 'node_0'}), Node.roots.find(:first, :conditions => {:name => 'node_0'})
+        expect(Node.find(:first, :conditions => {:name => 'node_0'})).to eq(Node.roots.find(:first, :conditions => {:name => 'node_0'}))
       end
     end
     it "should show root nodes having a depth of 0" do
-      refute Node.roots.map(&:depth).detect{|d| d != 0}, 'Expecting root Nodes to have depth of 0'
+      Node.roots.map(&:depth).detect{|d| d.should_not be > 0}
     end
   end
 
