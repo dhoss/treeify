@@ -15,6 +15,8 @@ ActiveRecord::Base.establish_connection(
   :username => 'postgres'
 )
 
+ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
+
 class Node < ActiveRecord::Base
   acts_as_sane_tree
   validates_uniqueness_of :name
