@@ -1,9 +1,6 @@
-require File.join(File.expand_path(File.dirname(__FILE__)), 'setup')
+require 'spec_helper'
 
-AREL = !defined?(Arel).nil?
-AR_SCOPE = AREL ? ActiveRecord::Relation : ActiveRecord::NamedScope::Scope
-
-describe ActsAsSaneTree do
+describe SimpleTree do
 
   describe "after suite setup" do
     it "should have populated nodes" do
@@ -18,14 +15,14 @@ describe ActsAsSaneTree do
       expect(AR_SCOPE.name).to eq(Node.roots.class.name)
     end
     it "should return all root nodes" do
-      Node.where(:parent_id => nil).count.should == Node.roots.count
+      Node.where(parent_id: nil).count.should == Node.roots.count
       Node.roots.map(&:parent_id).detect{|x|!x.nil?.should == true}
     end
     it "should allow scope chaining" do
       if(AREL)
-        expect(Node.where(:name => 'node_0').first).to eq(Node.roots.where(:name => 'node_0').first)
+        expect(Node.where(name:'node_0').first).to eq(Node.roots.where(name: 'node_0').first)
       else
-        expect(Node.find(:first, :conditions => {:name => 'node_0'})).to eq(Node.roots.find(:first, :conditions => {:name => 'node_0'}))
+        expect(Node.where(name:'node_0').first).to eq(Node.roots.where(name: 'node_0').first)
       end
     end
     it "should show root nodes having a depth of 0" do
@@ -35,36 +32,46 @@ describe ActsAsSaneTree do
 
   describe "when requesting parent" do
     it "should be nil for root nodes" do
-      assert_nil Node.roots.first.parent, 'Expecting root Node to have no parent'
+      Node.roots.first.parent.should be nil # 'Expecting root Node to have no parent'
     end
     it "should provide parent node" do
-      node = AREL ? Node.where('parent_id IS NOT NULL').first : Node.find(:first, :conditions => 'parent_id IS NOT NULL')
-      assert node.parent, 'Expecting Node to provide parent'
-      assert_kind_of Node, node.parent
-      assert node.parent.children.include?(node), 'Expecting parent Node\'s children to include base node'
+      node = Node.where('nodes.parent_id IS NOT NULL').take
+      p "CONFIG" 
+      pp Node.configuration
+      p "NODE"
+      pp node
+      p "PARENT"
+      pp node.parent
+      p "CHILDREN"
+      pp node.parent.children.count
+      node.parent.should_not be nil
+      node.parent.should be_a(Node)
+      node.parent.children.limit(10).include?(node).should == true 
+      #'Expecting parent Node\'s children to include base node'
     end
   end
 
   describe "when requesting children" do
     it "should be scope-able" do
       if(AREL)
-        assert_kind_of AR_SCOPE, Node.first.children.scoped
+        expect(Node.first.children.scoped).to eq(AR_SCOPE)
       else
-        assert_equal AR_SCOPE.name, Node.first.children.scoped({}).class.name
+        expect(Node.first.children.scoped({}).class.name).to eq(AR_SCOPE.name)
       end
     end
     it "should provide nodes with parent's ID set to parent.id" do
       parent = Node.roots.first
       parent.children.each do |node|
-        assert_equal parent.id, node.parent_id
+        expect(parent.id).to eq(node.parent_id)
       end
     end
     it "should allow scope chaining" do
       parent = Node.roots.first
       if(AREL)
-        assert_equal Node.where(:parent_id => parent.id).order(:id).first, parent.children.order(:id).first
+        expect(Node.where(parent_id: parent.id).order('nodes.id DESC').first).to eq(parent.children.order('nodes.id DESC').first)
       else
-        assert_equal Node.find(:first, :conditions => {:parent_id => parent.id}, :order => :id), parent.children.find(:first, :order => :id)
+        expect(Node.find(:first, :conditions => {:parent_id => parent.id}, :order => :id)).to
+          eq(parent.children.find(:first, :order => :id))
       end
     end
   end
