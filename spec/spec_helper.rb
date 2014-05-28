@@ -31,13 +31,16 @@ class NodeSetup < ActiveRecord::Migration
       end
       add_index :nodes, [:parent_id, :id], :unique => true
     end
+
+    def down 
+      drop_table :nodes
+    end
   end
 end
 
 RSpec.configure do |config|
 
   config.before(:suite) do                                                                                       
-    DatabaseCleaner.strategy = :truncation                                                                       
     NodeSetup.up
     # Create three root nodes with 50 descendants
     # Descendants should branch randomly
@@ -57,12 +60,8 @@ RSpec.configure do |config|
     end   
   end                                                                                                            
                                                                                                                  
-  config.before(:each) do                                                                                        
-    DatabaseCleaner.start                                                                                        
-  end                                                                                                            
-                                                                                                                 
-  config.after(:each) do                                                                                         
-    DatabaseCleaner.clean    
+  config.after(:suite) do                                                                                         
+    NodeSetup.down
   end
 end 
 

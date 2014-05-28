@@ -11,17 +11,11 @@ describe SimpleTree do
   end
 
   describe "when requesting root nodes" do
-    it "should return a scoping" do
-      expect(AR_SCOPE.name).to eq(Node.roots.class.name)
-    end
     it "should return all root nodes" do
       Node.where(parent_id: nil).count.should == Node.roots.count
       Node.roots.map(&:parent_id).detect{|x|!x.nil?.should == true}
     end
     it "should allow scope chaining" do
-      if(AREL)
-        expect(Node.where(name:'node_0').first).to eq(Node.roots.where(name: 'node_0').first)
-      else
         expect(Node.where(name:'node_0').first).to eq(Node.roots.where(name: 'node_0').first)
       end
     end
@@ -36,29 +30,13 @@ describe SimpleTree do
     end
     it "should provide parent node" do
       node = Node.where('nodes.parent_id IS NOT NULL').take
-      p "CONFIG" 
-      pp Node.configuration
-      p "NODE"
-      pp node
-      p "PARENT"
-      pp node.parent
-      p "CHILDREN"
-      pp node.parent.children.count
       node.parent.should_not be nil
       node.parent.should be_a(Node)
       node.parent.children.limit(10).include?(node).should == true 
-      #'Expecting parent Node\'s children to include base node'
     end
   end
 
   describe "when requesting children" do
-    it "should be scope-able" do
-      if(AREL)
-        expect(Node.first.children.scoped).to eq(AR_SCOPE)
-      else
-        expect(Node.first.children.scoped({}).class.name).to eq(AR_SCOPE.name)
-      end
-    end
     it "should provide nodes with parent's ID set to parent.id" do
       parent = Node.roots.first
       parent.children.each do |node|
@@ -67,12 +45,8 @@ describe SimpleTree do
     end
     it "should allow scope chaining" do
       parent = Node.roots.first
-      if(AREL)
-        expect(Node.where(parent_id: parent.id).order('nodes.id DESC').first).to eq(parent.children.order('nodes.id DESC').first)
-      else
         expect(Node.find(:first, :conditions => {:parent_id => parent.id}, :order => :id)).to
           eq(parent.children.find(:first, :order => :id))
-      end
     end
   end
 
@@ -238,4 +212,3 @@ describe SimpleTree do
     end
   end
 
-end
