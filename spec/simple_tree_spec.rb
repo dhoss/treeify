@@ -3,6 +3,10 @@ require 'spec_helper'
 describe SimpleTree do
   describe "Initialization" do
     it "is set up correctly" do
+      expect(Node.config).to eq({:table_name=> :nodes, :columns=> [:name]})
+    end
+
+    it "has the correct data in the database" do
       pending "fart"
     end
   end

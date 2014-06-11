@@ -16,10 +16,10 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
 
 class Node < ActiveRecord::Base
-  include SimpleTree
-  
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope => :id
+  include SimpleTree
+  config({ :table_name => :nodes, :columns => [:name]})
 end
 
 class NodeSetup < ActiveRecord::Migration
