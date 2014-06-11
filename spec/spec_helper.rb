@@ -16,10 +16,11 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
 
 class Node < ActiveRecord::Base
-  validates_uniqueness_of :name
-  validates_uniqueness_of :parent_id, :scope => :id
   include Treeify
-  config({ :table_name => :nodes, :cols => [:name]})
+  config({:cols => [:name]})
+  
+  validates_uniqueness_of :name
+  validates_uniqueness_of :parent_id, :scope=> :id
 end
 
 class NodeSetup < ActiveRecord::Migration

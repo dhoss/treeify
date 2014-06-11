@@ -6,46 +6,43 @@ require "active_support/core_ext/class/attribute"
 module Treeify
   extend ActiveSupport::Concern 
 
+  included do
+    class_attribute :cols
+    scope :roots, -> { where(parent_id: nil) }
+    scope :tree_for, -> (instance) { where("#{table_name}.id IN (#{tree_sql_for(instance)})").order("#{table_name}.id") }
+  end
+
   module ClassMethods
-    mattr_accessor :table_name
-    mattr_accessor :cols
 
     def config(hash = {})
       # apparently columns is a reserved word in rails
       self.cols       = hash[:cols]
-      self.table_name = hash[:table_name]
     end
 
-    def query 
-      "WITH RECURSIVE cte (id, #{self.cols.join(',')}, path, parent_id, depth)  AS (
+    def tree_sql_for(instance)
+      "WITH RECURSIVE cte (id, path)  AS (
          SELECT  id,
-          #{self.cols.join(',')}
-           array[id] AS path,
-           parent_id,
-           1 AS depth
-         FROM    #{self.table_name}
-         WHERE   parent_id IS NULL
+           array[id] AS path
+         FROM    #{table_name}
+         WHERE   id = #{instance.id}
 
          UNION ALL
 
-         SELECT  #{self.table_name}.id,
-            #{self.cols.map{ |c| self.table_name << '.' << c }.join(',')},
-            #{self.table_name}.author,
-            cte.path || #{self.table_name}.id,
-            #{self.table_name}.parent_id,
-            cte.depth + 1 AS depth
-         FROM    #{self.table_name}
-         JOIN cte ON #{self.table_name}.parent_id = cte.id
+         SELECT  #{table_name}.id,
+            cte.path || #{table_name}.id
+         FROM    #{table_name}
+         JOIN cte ON #{table_name}.parent_id = cte.id
        )
-       SELECT id, #{self.cols.join(',')}, path, depth FROM cte
-       ORDER BY path;"
-    end
-
-    def roots
-      where(parent_id: nil)
+       SELECT id FROM cte
+       ORDER BY path"
     end
   end
+        
+  def descendents
+    self_and_descendents - [self]
+  end
 
-  module InstanceMethods
+  def self_and_descendents
+    self.class.tree_for(self)
   end
 end 

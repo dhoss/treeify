@@ -3,12 +3,13 @@ require 'spec_helper'
 describe Treeify do
   describe "Initialization" do
     it "is set up correctly" do
-      expect(Node.table_name).to eq(:nodes)
+      expect(Node.table_name).to eq("nodes")
       expect(Node.cols).to eq([:name])
     end
 
     it "has the correct data in the database" do
       expect(Node.roots.count).to eq(3)
+      expect(Node.roots.first.descendents.count).to eq(50)
     end
   end
 
