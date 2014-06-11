@@ -40,6 +40,10 @@ module Treeify
        SELECT id, #{self.cols.join(',')}, path, depth FROM cte
        ORDER BY path;"
     end
+
+    def roots
+      where(parent_id: nil)
+    end
   end
 
   module InstanceMethods

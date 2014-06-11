@@ -8,7 +8,7 @@ describe Treeify do
     end
 
     it "has the correct data in the database" do
-      pending "fart"
+      expect(Node.roots.count).to eq(3)
     end
   end
 
