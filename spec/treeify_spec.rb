@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SimpleTree do
+describe Treeify do
   describe "Initialization" do
     it "is set up correctly" do
       expect(Node.table_name).to eq(:nodes)

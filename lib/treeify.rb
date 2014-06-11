@@ -3,7 +3,7 @@ require "active_support/concern"
 require "active_support/core_ext/module/attribute_accessors"
 require "active_support/core_ext/class/attribute"
 
-module SimpleTree
+module Treeify
   extend ActiveSupport::Concern 
 
   module ClassMethods

@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'active_record'
 require 'active_record/migration'
 require 'benchmark'
-require 'simple_tree'
+require 'treeify'
 require 'rspec/autorun'
 require 'database_cleaner'
 
@@ -18,7 +18,7 @@ ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
 class Node < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope => :id
-  include SimpleTree
+  include Treeify
   config({ :table_name => :nodes, :cols => [:name]})
 end
 
