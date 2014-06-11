@@ -12,7 +12,7 @@ module SimpleTree
 
     def config(hash = {})
       # apparently columns is a reserved word in rails
-      self.cols       = hash[:columns]
+      self.cols       = hash[:cols]
       self.table_name = hash[:table_name]
     end
 

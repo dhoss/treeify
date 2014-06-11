@@ -19,7 +19,7 @@ class Node < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope => :id
   include SimpleTree
-  config({ :table_name => :nodes, :columns => [:name]})
+  config({ :table_name => :nodes, :cols => [:name]})
 end
 
 class NodeSetup < ActiveRecord::Migration
