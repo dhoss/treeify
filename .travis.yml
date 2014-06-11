@@ -4,9 +4,14 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
+service: postgresql
 before_install:
   - gem update --system
   - gem --version # make sure rubygems actually were updated
+install:                                                                                                         
+ - sudo apt-get update -qq                                                                                       
+ - sudo apt-get install -qq postgresql-contrib-9.1                                                               
+ - bundle install 
 before_script:
   - "psql -U postgres -c 'create database tree_test;'"
 script: bundle exec rake test
