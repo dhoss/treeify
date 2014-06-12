@@ -12,4 +12,4 @@ install:
  - bundle install 
 before_script:
   - "psql -U postgres -c 'create database tree_test;'"
-script: bundle exec rake test
+script: bundle exec rake rspec

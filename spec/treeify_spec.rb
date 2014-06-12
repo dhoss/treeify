@@ -13,21 +13,19 @@ describe Treeify do
     end
   end
 
-  describe "Roots" do
-    it "has a set of root nodes" do
-      pending "fart"
-    end
-  end
-
   describe "Down the tree" do
+    subject(:parent) { Node.roots.first }
     it "retrieves its descendents" do
-      pending "fart"
+      expect(parent.descendents.count).to eq(50)
+      # self_and_descendents - [self] == 49
+      expect(parent.descendents.first.descendents.count).to eq(49)
     end
   end
 
   describe "Back up the tree" do
+    subject(:descendent) { Node.roots.first.descendents.first }
     it "retrieves its ancestors" do
-      pending "fart"
+      expect(descendent.ancestors.count).to eq(49)
     end
   end
 
