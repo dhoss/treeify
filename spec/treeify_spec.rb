@@ -30,14 +30,15 @@ describe Treeify do
   end
 
   describe "Modifying the tree" do
+    subject(:new_root) { Node.create(name: "new root node") }
     it "adds a new child" do
+      expect(new_root.name).to eq("new root node") 
     end
 
-    it "updates a child" do
-    end
+    it "updates a child"
 
-    it "deletes a child" do
-    end
+    it "deletes a child" 
+
   end
 end
 
