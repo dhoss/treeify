@@ -31,15 +31,12 @@ describe Treeify do
 
   describe "Modifying the tree" do
     it "adds a new child" do
-      pending "fart"
     end
 
     it "updates a child" do
-      pending "fart"
     end
 
     it "deletes a child" do
-      pending "fart"
     end
   end
 end

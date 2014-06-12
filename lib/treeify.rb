@@ -9,8 +9,8 @@ module Treeify
   included do
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
-    scope :tree_for, -> (instance) { where("#{table_name}.id IN (#{tree_sql_for(instance)})").order("#{table_name}.id") }
-    scope :tree_for_ancestors, -> (instance) { where("#{table_name}.id IN (#{tree_sql_for_ancestors(instance)})").order("#{table_name}.id") }
+    scope :tree_for, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for(instance)})").order("#{table_name}.id") }
+    scope :tree_for_ancestors, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for_ancestors(instance)})").order("#{table_name}.id") }
   end
 
   module ClassMethods
