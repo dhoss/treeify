@@ -7,6 +7,12 @@ module Treeify
   extend ActiveSupport::Concern 
 
   included do
+    has_many :children,
+             class_name: self,
+             foreign_key: "parent_id"
+    belongs_to :parent,
+                class_name: self,
+                foreign_key: "parent_id"
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_for, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for(instance)})").order("#{table_name}.id") }

@@ -18,7 +18,7 @@ ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
 class Node < ActiveRecord::Base
   include Treeify
   config({:cols => [:name]})
-  
+
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope=> :id
 end
@@ -41,7 +41,7 @@ class NodeSetup < ActiveRecord::Migration
 end
 
 RSpec.configure do |config|
-
+  I18n.enforce_available_locales = false
   config.before(:suite) do                                                                                       
     NodeSetup.up
     # Create three root nodes with 50 descendants

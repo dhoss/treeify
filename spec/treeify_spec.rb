@@ -30,14 +30,53 @@ describe Treeify do
   end
 
   describe "Modifying the tree" do
-    subject(:new_root) { Node.create(name: "new root node") }
     it "adds a new child" do
-      expect(new_root.name).to eq("new root node") 
+      root = Node.roots.first
+      root.children << Node.create(name: "new child node")
+      child = root.children.where(name: "new child node").take
+      expect(child.name).to eq("new child node")
     end
 
-    it "updates a child"
+    it "has the correct parent" do
+      root = Node.roots.first
+      child = Node.where(name: "new child node").take
+      expect(child.parent.id).to eq(root.id)
+    end
 
-    it "deletes a child" 
+    it "updates a child" do
+      root = Node.roots.first
+      child = Node.where(name: "new child node").take
+      child.name = "fart nuggets"
+      child.save
+      expect(child.name).to eq("fart nuggets")
+    end
+
+
+    it "deletes a child" do
+      root = Node.roots.first
+      child = Node.where(name: "new child node").take
+      Node.delete(child)
+      expect(Node.where(name: "new child node").take).to eq(nil)
+    end
+
+    it "adds children to child nodes"
+
+    it "has the correct tree after subchildren are added"
+
+    it "deletes subchildren"
+
+    it "re-parents children"
+
+    it "has the correct tree after children are re-parented"
+
+    it "retrieves siblings"
+
+    it "adds siblings"
+
+    it "updates siblings"
+
+    it "deletes siblings"
+
 
   end
 end
