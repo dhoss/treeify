@@ -59,9 +59,22 @@ describe Treeify do
       expect(Node.where(name: "new child node").take).to eq(nil)
     end
 
-    it "adds children to child nodes"
+    it "adds children to child nodes" do
+      root = Node.roots.first
+      child = root.children.create(name: "new child node")
+      subchild = child.children.create(name: "new subchild node")
+      expect(child.children.count).to eq(1)
+    end
 
-    it "has the correct tree after subchildren are added"
+    it "has the correct tree after subchildren are added" do
+      tree = Node.roots.first.self_and_descendents
+      tree.each do |node|
+        pending "Ancestor count for parent nodes doesn't work yet"
+        if node.parent_id.nil?
+          expect(node.ancestors.count).to eq(0)
+        end
+      end
+    end
 
     it "deletes subchildren"
 
@@ -69,7 +82,13 @@ describe Treeify do
 
     it "has the correct tree after children are re-parented"
 
-    it "retrieves siblings"
+    it "retrieves siblings" do
+      10.times do |n|
+        Node.create(name: "sib_#{n}", parent_id: Node.roots.first.id)
+      end
+      sib = Node.where(name: "sib_1").take
+      expect(sib.siblings.count).to eq(12)
+    end
 
     it "adds siblings"
 

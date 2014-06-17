@@ -49,7 +49,19 @@ module Treeify
     end
 
     def tree_sql_for_ancestors(instance)
-      "#{tree_sql(instance)}
+      "WITH RECURSIVE cte (id, path)  AS (
+         SELECT  id,
+           array[id] AS path
+         FROM    #{table_name}
+         WHERE   id = #{instance.id}
+         
+         UNION ALL
+
+         SELECT  #{table_name}.id,
+            cte.path || #{table_name}.id
+         FROM    #{table_name}
+         JOIN cte ON #{table_name}.parent_id = cte.id
+       )
       SELECT cte.id FROM cte WHERE cte.id != #{instance.id}"
     end
   end
@@ -64,5 +76,13 @@ module Treeify
 
   def self_and_descendents
     self.class.tree_for(self)
+  end
+
+  def is_root?
+    self.parent_id != nil
+  end
+
+  def siblings
+    self.class.where(parent_id: self.parent_id) - [self]
   end
 end 
