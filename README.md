@@ -39,6 +39,7 @@ child2 = child.children.create(name: "child 2")
   ```
   4. Retrieve tree of stuff
   ```
+
 parent.descendent_tree
   ```
 
