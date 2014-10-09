@@ -96,6 +96,32 @@ describe Treeify do
 
     it "deletes siblings"
 
+    it "builds the descendents_tree properly" do
+      parent = Node.create(name: "tree root")
+      parent.children << Node.new(name: "child 1")
+      parent.children.first.children << Node.new(name: "child 2")
+      p "CHILDREN" 
+      pp parent.descendent_tree
+      child = parent.children.first
+      subchild = child.children.first
+      expect(parent.descendent_tree).to match_array([
+        {
+          "id" => child.id,
+          "parent_id" => parent.id,
+          "name" => child.name,
+          "children" => [
+            {
+              "id" => subchild.id,
+              "parent_id" => child.id,
+              "name" => subchild.name,
+              "children" => []
+            }
+          ]
+       }
+      ])
+    end
+
+
 
   end
 end

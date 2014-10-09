@@ -18,7 +18,7 @@ ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['SHOW_SQL']
 
 class Node < ActiveRecord::Base
   include Treeify
-  config({:cols => [:name]})
+  config({cols: [:name]})
 
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope=> :id
@@ -35,7 +35,7 @@ class NodeSetup < ActiveRecord::Migration
       add_index :nodes, [:parent_id, :id], :unique => true
     end
 
-    def down 
+    def down
       drop_table :nodes
     end
   end
@@ -52,9 +52,9 @@ RSpec.configure do |config|
 
     3.times do |i|
       nodes[i] = []
-      parent = Node.create(:name => "root_#{i}")
+      parent = Node.create(name: "root_#{i}")
       50.times do |j|
-        node = Node.new(:name => "node_#{i}_#{j}")
+        node = Node.new(name: "node_#{i}_#{j}")
         _parent = nodes[i][rand(nodes[i].size)] || parent
         node.parent_id = _parent.id
         node.save
