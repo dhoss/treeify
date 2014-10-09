@@ -33,14 +33,32 @@ end
   ```
 parent = Node.create(name: "parent node")
 
-child = parent.children.create(name: "child 1")
+parent.children << Node.new(name: "child 1")
 
-child2 = child.children.create(name: "child 2")
+parent.children.first.children << Node.new(name: "child 2")
   ```
   4. Retrieve tree of stuff
   ```
+  parent.descendent_tree
 
-parent.descendent_tree
+  # which should give you something like this:
+  [
+    {
+      "id"=>168,
+      "name"=>"child 1",
+      "parent_id"=>167,
+      "children"=>
+        [
+          {
+            "id"=>169, 
+            "name"=>"child 2", 
+            "parent_id"=>168, 
+            "children"=>[]
+          }
+        ]
+    }
+  ]
+
   ```
 
 License

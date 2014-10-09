@@ -100,8 +100,6 @@ describe Treeify do
       parent = Node.create(name: "tree root")
       parent.children << Node.new(name: "child 1")
       parent.children.first.children << Node.new(name: "child 2")
-      p "CHILDREN" 
-      pp parent.descendent_tree
       child = parent.children.first
       subchild = child.children.first
       expect(parent.descendent_tree).to match_array([
