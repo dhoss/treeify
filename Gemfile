@@ -6,5 +6,6 @@ gem 'pg'
 gem 'rspec'
 
 group :test, :development do
+  gem "codeclimate-test-reporter", group: :test, require: nil
   gem 'database_cleaner'
 end

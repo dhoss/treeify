@@ -1,10 +1,11 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 require 'rubygems'
 require 'bundler/setup'
 require 'active_record'
 require 'active_record/migration'
 require 'benchmark'
 require 'treeify'
-require 'rspec/autorun'
 require 'database_cleaner'
 
 ActiveRecord::Base.establish_connection(
