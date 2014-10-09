@@ -9,8 +9,7 @@ treeify
 Synopsis
 ========
 
- 1. Create your migration
-
+  1. Create your migration
 ```
   create_table :nodes do |t|
     t.text :name
@@ -20,8 +19,7 @@ Synopsis
   add_index :nodes, [:parent_id, :id], :unique => true
 ```
 
- 2. Create your model 
-
+  2. Create your model 
 ```
 class Node < ActiveRecord::Base
   include Treeify
@@ -31,9 +29,7 @@ class Node < ActiveRecord::Base
   validates_uniqueness_of :parent_id, :scope=> :id
 end
 ```
-
- 3. Create a tree of stuff
-
+  3. Create a tree of stuff
 ```
 parent = Node.create(name: "parent node")
 
@@ -41,9 +37,7 @@ child = parent.children.create(name: "child 1")
 
 child2 = child.children.create(name: "child 2")
 ```
-
-4. Retrieve tree of stuff
-
+  4. Retrieve tree of stuff
 ```
 parent.descendent_tree
 ```
