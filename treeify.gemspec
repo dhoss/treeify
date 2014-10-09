@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.license = "MIT"
   s.homepage = "http://rubygems.org/gems/treeify"
   s.add_runtime_dependency "pg"
-  s.add_runtime_dependency "activerecord", "~> 4.1.1"
+  s.add_runtime_dependency "activerecord", "~> 4.1.6"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
   s.add_development_dependency "database_cleaner"
