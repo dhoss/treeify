@@ -96,6 +96,16 @@ API
    4. ```config``` Allows you to pass in custom column names to be retrieved.  THIS WILL CHANGE as "config" isn't nearly generic enough to not cause conflicts with other libraries.
    5. ```descendents``` Retrieves direct descendents of a node
    6. ```descendent_tree``` Returns an array of hashes containing a tree-like structure of a given node's descendents and sub-descendents.
+
+
+History and Justification
+=========================
+
+This all started off as a fork of [acts_as_sane_tree](https://github.com/chrisroberts/acts_as_sane_tree), until I discovered it would be an enormous pain to port it directly over to be rails 4 compatible.  I read through a few things, and decided it would be best just to huck some SQL into a few methods and shape the data as needed.  For now, it works fine.  
+
+As I've stated before, I want to optimize the SQL and clean up the code to be less repetitive, and get some actual benchmarks going.  
+
+I'm not using the other gems that provide tree like retrieval because I don't agree so much with nested sets, adjacency lists, and while materialized paths aren't awful, Postgres provides functionality that performs much better.
   
 License
 =======
