@@ -60,7 +60,43 @@ parent.children.first.children << Node.new(name: "child 2")
   ]
 
   ```
+  
+  
+The SQL Generated looks something like this: 
+  
+  ```
+   SELECT "nodes".* FROM "nodes"  WHERE (nodes.id IN (WITH RECURSIVE cte (id, path)  AS (
+         SELECT  id,
+           array[id] AS path
+         FROM    nodes
+         WHERE   id = 8
 
+         UNION ALL
+
+         SELECT  nodes.id,
+            cte.path || posts.id
+         FROM    nodes
+         JOIN cte ON nodes.parent_id = cte.id
+       )
+       SELECT id FROM cte
+       ORDER BY path))  ORDER BY posts.id
+  ```
+
+I haven't done much in terms of benchmarking, but it seems like using a join would be better than using an IN() clause here.  I'm looking to improve this in future versions.
+  
+  
+  API
+  ===
+  
+  In the spirit of keeping things simple, Treeify does just a few things:
+  
+   1. Provides a ```has_many :children``` relationship which is a self-join that allows you to collect the direct descendents of any node.
+   2. On  the flip side, it provides a ``belongs_to :parent``` relationship to get a node's parent, if one exists
+   3. The ```roots``` scope, which retrieves all parent records (their ```parent_id``` is null)
+   4. ```config``` Allows you to pass in custom column names to be retrieved.  THIS WILL CHANGE as "config" isn't nearly generic enough to not cause conflicts with other libraries.
+   5. ```descendents``` Retrieves direct descendents of a node
+   6. ```descendent_tree``` Returns an array of hashes containing a tree-like structure of a given node's descendents and sub-descendents.
+  
 License
 =======
 The MIT License (MIT)
