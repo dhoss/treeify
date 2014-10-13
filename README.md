@@ -91,7 +91,7 @@ API
   In the spirit of keeping things simple, Treeify does just a few things:
   
    1. Provides a ```has_many :children``` relationship which is a self-join that allows you to collect the direct descendents of any node.
-   2. On  the flip side, it provides a ``belongs_to :parent``` relationship to get a node's parent, if one exists
+   2. On  the flip side, it provides a ```belongs_to :parent``` relationship to get a node's parent, if one exists
    3. The ```roots``` scope, which retrieves all parent records (their ```parent_id``` is null)
    4. ```config``` Allows you to pass in custom column names to be retrieved.  THIS WILL CHANGE as "config" isn't nearly generic enough to not cause conflicts with other libraries.
    5. ```descendents``` Retrieves direct descendents of a node
