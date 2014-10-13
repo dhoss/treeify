@@ -85,8 +85,8 @@ The SQL Generated looks something like this:
 I haven't done much in terms of benchmarking, but it seems like using a join would be better than using an IN() clause here.  I'm looking to improve this in future versions.
   
   
-  API
-  ====
+API
+====
   
   In the spirit of keeping things simple, Treeify does just a few things:
   
