@@ -86,7 +86,7 @@ I haven't done much in terms of benchmarking, but it seems like using a join wou
   
   
   API
-  ===
+  ====
   
   In the spirit of keeping things simple, Treeify does just a few things:
   
