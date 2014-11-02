@@ -13,17 +13,18 @@ module Treeify
     belongs_to :parent,
                 class_name: self,
                 foreign_key: "parent_id"
+
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_for, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for(instance)})").order("#{table_name}.id") }
     scope :tree_for_ancestors, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for_ancestors(instance)})").order("#{table_name}.id") }
+
   end
 
   module ClassMethods
-
-    def config(hash = {})
-      # apparently columns is a reserved word in rails
-      self.cols       = hash[:cols]
+    
+    def tree_config(hash = {})
+      self.cols = hash[:cols]
     end
 
     def tree_sql(instance)
