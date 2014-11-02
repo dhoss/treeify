@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Treeify do
   describe "Initialization" do
+    it "has the correct config values" do
+      expect(Node.cols).to eq([:name])
+    end
+
     it "is set up correctly" do
       expect(Node.table_name).to eq("nodes")
       expect(Node.cols).to eq([:name])
@@ -118,9 +122,6 @@ describe Treeify do
        }
       ])
     end
-
-
-
   end
 end
 
