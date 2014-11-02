@@ -8,13 +8,30 @@ describe Treeify do
 
     it "is set up correctly" do
       expect(Node.table_name).to eq("nodes")
-      expect(Node.cols).to eq([:name])
     end
 
     it "has the correct data in the database" do
       expect(Node.roots.count).to eq(3)
       expect(Node.roots.first.descendents.count).to eq(50)
     end
+
+    it "retrieves all the columns defined in the configuration" do
+      expected_sql = "WITH RECURSIVE cte (id, path)  AS (
+         SELECT  id,
+           array[id] AS path
+         FROM    nodes
+         WHERE   id = 1
+
+         UNION ALL
+
+         SELECT  nodes.id,
+            cte.path || nodes.id
+         FROM    nodes
+         JOIN cte ON nodes.parent_id = cte.id
+       )"
+      expect(Node.tree_sql(Node.first)).to eq(expected_sql)
+    end
+
   end
 
   describe "Down the tree" do
