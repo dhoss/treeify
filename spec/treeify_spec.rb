@@ -16,8 +16,9 @@ describe Treeify do
     end
 
     it "retrieves all the columns defined in the configuration" do
-      expected_sql = "WITH RECURSIVE cte (id, path, name)  AS (
+      expected_sql = "WITH RECURSIVE cte (id, parent_id, path, name)  AS (
          SELECT  id,
+           parent_id,
            array[id] AS path, name
          FROM    nodes
          WHERE   id = 1
@@ -25,6 +26,7 @@ describe Treeify do
          UNION ALL
 
          SELECT  nodes.id,
+            nodes.parent_id,
             cte.path || nodes.id, nodes.name
          FROM    nodes
          JOIN cte ON nodes.parent_id = cte.id
@@ -133,15 +135,17 @@ describe Treeify do
       subchild = child.children.first
       expect(parent.descendent_tree).to match_array([
         {
-          "id" => child.id,
+          "id"        => child.id,
           "parent_id" => parent.id,
-          "name" => child.name,
+          "path"      => [parent.id, child.id], 
+          "name"      => child.name,
           "children" => [
             {
-              "id" => subchild.id,
+              "id"        => subchild.id,
               "parent_id" => child.id,
-              "name" => subchild.name,
-              "children" => []
+              "path"      => [parent.id, child.id, subchild.id],
+              "name"      => subchild.name,
+              "children"  => []
             }
           ]
        }
