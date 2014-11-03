@@ -23,7 +23,7 @@ Synopsis
   ```
 class Node < ActiveRecord::Base
   include Treeify
-  config({:cols => [:name]})
+  tree_config({:cols => [:name]})
 
   validates_uniqueness_of :name
   validates_uniqueness_of :parent_id, :scope=> :id
