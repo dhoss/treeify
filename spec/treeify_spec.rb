@@ -98,9 +98,9 @@ describe Treeify do
     end
 
     it "has the correct tree after subchildren are added" do
+      pending "This is a bug"
       tree = Node.roots.first.self_and_descendents
       tree.each do |node|
-        pending "Ancestor count for parent nodes doesn't work yet"
         if node.parent_id.nil?
           expect(node.ancestors.count).to eq(0)
         end

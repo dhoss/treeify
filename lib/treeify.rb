@@ -18,7 +18,6 @@ module Treeify
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_for, ->(instance) { self.find_by_sql self.tree_sql_for(instance) }
     scope :tree_for_ancestors, ->(instance) { self.find_by_sql self.tree_sql_for_ancestors(instance) }
-
   end
 
   module ClassMethods
