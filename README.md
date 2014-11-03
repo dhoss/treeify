@@ -5,6 +5,7 @@ treeify
 [![Test Coverage](https://codeclimate.com/github/dhoss/treeify/badges/coverage.svg)](https://codeclimate.com/github/dhoss/treeify)
 [![endorse](https://api.coderwall.com/dhoss/endorsecount.png)](https://coderwall.com/dhoss)
 [![Dependency Status](https://gemnasium.com/dhoss/treeify.png)](https://gemnasium.com/dhoss/treeify)
+[![Gem Version](https://badge.fury.io/rb/treeify.svg)](http://badge.fury.io/rb/treeify)
 
 Synopsis
 ========
@@ -93,7 +94,7 @@ API
    1. Provides a ```has_many :children``` relationship which is a self-join that allows you to collect the direct descendents of any node.
    2. On  the flip side, it provides a ```belongs_to :parent``` relationship to get a node's parent, if one exists
    3. The ```roots``` scope, which retrieves all parent records (their ```parent_id``` is null)
-   4. ```config``` Allows you to pass in custom column names to be retrieved.  THIS WILL CHANGE as "config" isn't nearly generic enough to not cause conflicts with other libraries.
+   4. ```tree_config``` Allows you to pass in custom column names to be retrieved.  THIS ~~~WILL~~~ HAS CHANGED as "config" isn't nearly generic enough to not cause conflicts with other libraries.
    5. ```descendents``` Retrieves direct descendents of a node
    6. ```descendent_tree``` Returns an array of hashes containing a tree-like structure of a given node's descendents and sub-descendents.
 
