@@ -27,17 +27,40 @@ module Treeify
       self.cols = hash[:cols]
     end
 
+    def columns_joined(char=",")
+      self.cols.join(char)
+    end
+
+    def columns_with_table_name
+      self.cols.map{|c| 
+        c = "#{table_name}.#{c}" 
+      }.join(",")
+    end
+
+    def has_config_defined_cols?
+      !self.cols.empty?
+    end
+
+    # sort of hacky, but check to see if we have any columns defined in the config
+    # if we do, return the string of columns, formatted appropriately
+    # otherwise, just return an empty string
+    def appropriate_column_listing(columns = columns_joined)
+      has_config_defined_cols? == true ? ", #{columns}" : ""
+    end
+
     def tree_sql(instance)
-      "WITH RECURSIVE cte (id, path)  AS (
+      cte_params = has_config_defined_cols? ? "id, path, #{columns_joined}" : "id, path"
+
+      "WITH RECURSIVE cte (#{cte_params})  AS (
          SELECT  id,
-           array[id] AS path
+           array[id] AS path#{appropriate_column_listing}
          FROM    #{table_name}
          WHERE   id = #{instance.id}
 
          UNION ALL
 
          SELECT  #{table_name}.id,
-            cte.path || #{table_name}.id
+            cte.path || #{table_name}.id#{appropriate_column_listing(columns_with_table_name)}
          FROM    #{table_name}
          JOIN cte ON #{table_name}.parent_id = cte.id
        )"

@@ -16,23 +16,31 @@ describe Treeify do
     end
 
     it "retrieves all the columns defined in the configuration" do
-      expected_sql = "WITH RECURSIVE cte (id, path)  AS (
+      expected_sql = "WITH RECURSIVE cte (id, path, name)  AS (
          SELECT  id,
-           array[id] AS path
+           array[id] AS path, name
          FROM    nodes
          WHERE   id = 1
 
          UNION ALL
 
          SELECT  nodes.id,
-            cte.path || nodes.id
+            cte.path || nodes.id, nodes.name
          FROM    nodes
          JOIN cte ON nodes.parent_id = cte.id
        )"
       expect(Node.tree_sql(Node.first)).to eq(expected_sql)
     end
-
   end
+
+  describe "Utility methods" do
+    it "joins the columns with a characer" do
+      pending "Still trying to get this working"
+      Treeify.cols << :another_test_column
+      expect(Treeify.columns_joined(",")).to eq("another_test_column,name")
+    end
+  end
+
 
   describe "Down the tree" do
     subject(:parent) { Node.roots.first }
