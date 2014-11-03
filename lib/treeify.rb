@@ -16,9 +16,8 @@ module Treeify
 
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
-
     scope :tree_for, ->(instance) { self.find_by_sql self.tree_sql_for(instance) }
-    scope :tree_for_ancestors, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for_ancestors(instance)})").order("#{table_name}.id") }
+    scope :tree_for_ancestors, ->(instance) { self.find_by_sql self.tree_sql_for_ancestors(instance) }
 
   end
 
@@ -76,20 +75,9 @@ module Treeify
     end
 
     def tree_sql_for_ancestors(instance)
-      "WITH RECURSIVE cte (id, path)  AS (
-         SELECT  id,
-           array[id] AS path
-         FROM    #{table_name}
-         WHERE   id = #{instance.id}
-         
-         UNION ALL
-
-         SELECT  #{table_name}.id,
-            cte.path || #{table_name}.id
-         FROM    #{table_name}
-         JOIN cte ON #{table_name}.parent_id = cte.id
-       )
-      SELECT cte.id FROM cte WHERE cte.id != #{instance.id}"
+      "#{tree_sql(instance)}
+      SELECT * FROM cte 
+      WHERE cte.id != #{instance.id}"
     end
   end
         
