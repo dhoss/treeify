@@ -1,10 +1,15 @@
 require 'active_record'
+require 'pp'
 require "active_support/concern"
 require "active_support/core_ext/module/attribute_accessors"
 require "active_support/core_ext/class/attribute"
 
 module Treeify
-  extend ActiveSupport::Concern 
+  extend ActiveSupport::Concern
+
+  cattr_writer :cols do 
+    []
+  end
 
   included do
     has_many :children,
@@ -17,27 +22,34 @@ module Treeify
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_for, ->(instance) { self.find_by_sql self.tree_sql_for(instance) }
+    scope :tree_for2, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for2(instance)})").order("#{table_name}.id") }
     scope :tree_for_ancestors, ->(instance) { self.find_by_sql self.tree_sql_for_ancestors(instance) }
   end
 
   module ClassMethods
     
     def tree_config(hash = {})
-      self.cols = hash[:cols]
+      self.cols = !hash[:cols].nil? == true ? hash[:cols] : []
     end
 
     def columns_joined(char=",")
+      self.cols ||= []
       self.cols.join(char)
     end
 
     def columns_with_table_name
+      self.cols ||= []
       self.cols.map{|c| 
         c = "#{table_name}.#{c}" 
       }.join(",")
     end
 
     def has_config_defined_cols?
-      !self.cols.empty?
+      #return true if self.respond_to?("cols") && !self.cols.nil? 
+      if self.respond_to?("cols")
+        return !self.cols.empty? if !self.cols.nil?
+      end
+      false
     end
 
     # sort of hacky, but check to see if we have any columns defined in the config
@@ -67,9 +79,29 @@ module Treeify
        )"
     end
 
+    def tree_sql2(instance)
+    "WITH RECURSIVE cte (id, path)  AS (
+     SELECT  id,
+             array[id] AS path
+     FROM    #{table_name}
+     WHERE   id = #{instance.id}
+     UNION ALL
+     SELECT  #{table_name}.id,
+             cte.path || #{table_name}.id
+     FROM    #{table_name}
+     JOIN cte ON #{table_name}.parent_id = cte.id
+     )"
+    end
+
     def tree_sql_for(instance)
       "#{tree_sql(instance)}
        SELECT * FROM cte
+       ORDER BY path"
+    end
+
+    def tree_sql_for2(instance)
+      "#{tree_sql2(instance)}
+       SELECT id FROM cte
        ORDER BY path"
     end
 
@@ -84,12 +116,20 @@ module Treeify
     self_and_descendents - [self]
   end
 
+  def descendents2
+    self_and_descendents2 - [self]
+  end
+
   def ancestors
     self.class.tree_for_ancestors(self)
   end
 
   def self_and_descendents
     self.class.tree_for(self)
+  end
+
+  def self_and_descendents2
+    self.class.tree_for2(self)
   end
 
   def is_root?
@@ -125,4 +165,6 @@ module Treeify
       nested_hash.has_key? item['parent_id']
     }.values
   end
+
+  
 end 
