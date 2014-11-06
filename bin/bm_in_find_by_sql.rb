@@ -37,10 +37,10 @@ NodeSetup.up
 nodes = []
 
 puts "Creating records..."
-10.times do |i|
+100.times do |i|
   nodes[i] = []
   parent = Node.create(name: "root_#{i}")
-  10.times do |j|
+  50.times do |j|
     node = Node.new(name: "node_#{i}_#{j}")
     _parent = nodes[i][rand(nodes[i].size)] || parent
     node.parent_id = _parent.id
