@@ -1,3 +1,7 @@
+  * [bumped version
+](http://github.com/dhoss/treeify/commit/54bbb5c7d44eb2232d22029ace7334fc36568a77)
+  * [added Changes file
+](http://github.com/dhoss/treeify/commit/e120240efbdb9b90229f501edea9332c4f33ae61)
   * [removed benchmarking methods
 ](http://github.com/dhoss/treeify/commit/8e4c0f885ee2d0c5612022a818877c452645c22f)
   * [updated benchmark script
