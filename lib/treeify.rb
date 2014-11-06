@@ -22,7 +22,6 @@ module Treeify
     class_attribute :cols
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_for, ->(instance) { self.find_by_sql self.tree_sql_for(instance) }
-    scope :tree_for2, ->(instance) { where("#{table_name}.id IN (#{tree_sql_for2(instance)})").order("#{table_name}.id") }
     scope :tree_for_ancestors, ->(instance) { self.find_by_sql self.tree_sql_for_ancestors(instance) }
   end
 
@@ -79,29 +78,9 @@ module Treeify
        )"
     end
 
-    def tree_sql2(instance)
-    "WITH RECURSIVE cte (id, path)  AS (
-     SELECT  id,
-             array[id] AS path
-     FROM    #{table_name}
-     WHERE   id = #{instance.id}
-     UNION ALL
-     SELECT  #{table_name}.id,
-             cte.path || #{table_name}.id
-     FROM    #{table_name}
-     JOIN cte ON #{table_name}.parent_id = cte.id
-     )"
-    end
-
     def tree_sql_for(instance)
       "#{tree_sql(instance)}
        SELECT * FROM cte
-       ORDER BY path"
-    end
-
-    def tree_sql_for2(instance)
-      "#{tree_sql2(instance)}
-       SELECT id FROM cte
        ORDER BY path"
     end
 
@@ -116,20 +95,12 @@ module Treeify
     self_and_descendents - [self]
   end
 
-  def descendents2
-    self_and_descendents2 - [self]
-  end
-
   def ancestors
     self.class.tree_for_ancestors(self)
   end
 
   def self_and_descendents
     self.class.tree_for(self)
-  end
-
-  def self_and_descendents2
-    self.class.tree_for2(self)
   end
 
   def is_root?
