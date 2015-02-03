@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files = "lib/treeify.rb"
   s.license = "MIT"
   s.homepage = "http://rubygems.org/gems/treeify"
-  s.add_runtime_dependency "pg", "0.18"
+  s.add_runtime_dependency "pg", "0.18.1"
   s.add_runtime_dependency "activerecord", "~> 4.2"
   s.add_development_dependency "rspec", "3.1.0"
   s.add_development_dependency "rake", "10.3.2"
