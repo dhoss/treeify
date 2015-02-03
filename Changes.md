@@ -1,3 +1,11 @@
+## Version 0.05:
+  * [Mon Feb 2 19:21:38 2015 -0700 - Added version 0.04 header
+](http://github.com/dhoss/treeify/commit/042b495403351278650773f38f054b74155e0701)
+  * [Mon Feb 2 15:30:25 2015 -0700 - updated gems, this fixes #6
+](http://github.com/dhoss/treeify/commit/e658637296396aa9c9eb7bf466aff0a96b821bbe)
+  * [Thu Nov 6 15:34:49 2014 -0700 - updated changelog
+](http://github.com/dhoss/treeify/commit/1e102a8a68b7e29c07f087f5e1ecd56cb37c4e9d)
+
 ## Version 0.04:
   * [bumped version
 ](http://github.com/dhoss/treeify/commit/54bbb5c7d44eb2232d22029ace7334fc36568a77)
