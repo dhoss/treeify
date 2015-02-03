@@ -1,3 +1,4 @@
+## Version 0.04:
   * [bumped version
 ](http://github.com/dhoss/treeify/commit/54bbb5c7d44eb2232d22029ace7334fc36568a77)
   * [added Changes file
