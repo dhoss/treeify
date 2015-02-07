@@ -1,3 +1,10 @@
+## Version 0.05.01:
+  * [Sat Feb 7 13:54:17 2015 -0700 - bumped version
+](http://github.com/dhoss/treeify/commit/2c7bbc753c42e042cd97f910bb884ec28a91ae93)
+  * [Sat Feb 7 13:52:35 2015 -0700 - updated dependencies
+](http://github.com/dhoss/treeify/commit/90c3151d70948a526ec2182d4ad0767bd0dc3ff5)
+  * [Mon Feb 2 20:52:21 2015 -0700 - bumped version
+](http://github.com/dhoss/treeify/commit/02a801e2951fd6470555ffe7ddb20245d2968499)
 ## Version 0.05:
   * [Mon Feb 2 19:21:38 2015 -0700 - Added version 0.04 header
 ](http://github.com/dhoss/treeify/commit/042b495403351278650773f38f054b74155e0701)
